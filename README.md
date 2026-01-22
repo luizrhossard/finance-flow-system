@@ -290,9 +290,8 @@ Este projeto está sob a licença MIT. Veja LICENSE para detalhes.
 
 GitHub: [@luizrhossard](https://github.com/luizrhossard)
 
-LinkedIn: [seu-perfil](https://linkedin.com/in/seu-perfil)
+LinkedIn: [luiz-henrique](https://linkedin.com/in/luiz-rhossard)
 
-Email: seu.email@exemplo.com
 
 ## 📞 Suporte
 

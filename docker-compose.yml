@@ -1,0 +1,59 @@
+version: '3.8'
+
+services:
+  # --- 1. Banco de Dados (PostgreSQL) ---
+  postgres-db:
+    image: postgres:15-alpine
+    container_name: finance_db
+    environment:
+      POSTGRES_USER: user_finance
+      POSTGRES_PASSWORD: password_secure_123
+      POSTGRES_DB: financedb
+    ports:
+      - '5432:5432' # Exposto para você conectar seu DBeaver/PgAdmin localmente
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - finance-network
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U user_finance -d financedb']
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # --- 2. Serviço de Inteligência (Python) ---
+  python-analysis:
+    build: ./analysis-python
+    container_name: finance_python
+    ports:
+      - '8000:8000' # Porta interna (FastAPI costuma usar 8000)
+    networks:
+      - finance-network
+    # Não precisa de volumes persistentes, é stateless
+
+  # --- 3. Backend Principal (Java Spring Boot) ---
+  java-backend:
+    build: ./backend-java
+    container_name: finance_java
+    ports:
+      - '8080:8080' # Porta que você acessa no navegador/Postman
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres-db:5432/financedb
+      - SPRING_DATASOURCE_USERNAME=user_finance
+      - SPRING_DATASOURCE_PASSWORD=password_secure_123
+      # URL interna para falar com o Python:
+      - PYTHON_SERVICE_URL=http://python-analysis:8000
+    depends_on:
+      postgres-db:
+        condition: service_healthy # Só sobe quando o banco der OK
+      python-analysis:
+        condition: service_started
+    networks:
+      - finance-network
+
+volumes:
+  postgres_data:
+
+networks:
+  finance-network:
+    driver: bridge

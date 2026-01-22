@@ -1,0 +1,48 @@
+# IDEs
+.idea/
+.vscode/
+*.swp
+*.iml
+
+# Build
+target/
+out/
+*.jar
+*.log
+*.class
+
+# Maven
+.mvn/
+
+# Docker
+.dockerignore
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+venv/
+env/
+
+# OS
+.DS_Store
+Thumbs.db
+.env
+
+# BlueJ files
+*.ctxt
+
+# Mobile Tools for Java (J2ME)
+.mtj.tmp/
+
+# Package Files
+*.war
+*.nar
+*.ear
+*.zip
+*.tar.gz
+*.rar
+
+# virtual machine crash logs
+hs_err_pid*
+replay_pid*
